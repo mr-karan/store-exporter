@@ -1,5 +1,5 @@
 # store-exporter
-_Sidecar approach to instrumenting your apps for Prometheus!_
+_Utility to extract metrics from arbitary data stores in Prometheus format_
 
 ## Overview
 
@@ -31,7 +31,7 @@ Export your custom app metrics from external data _stores_ like PostgreSQL, MySQ
 - Your app cares about being _fast_ in which case adding any external library penalises performance.
 - You don't want to mix the app logic with the metric collection/exposition logic.
 
-In all the above cases, it is more suitable to take a Sidecar approach, where you query for metrics from an external persistent store your app maintains. This utility just makes it easier for anyone to write custom SQL queries and expose metrics without having to worry about Prometheus format/exposition logic. You can run a single binary anywhere in your cluster environment which has access to the external store which exposes the metrics on an HTTP server confirming to Prometheus metric format.
+In all the above cases, it is more suitable to take a [Sidecar approach](https://docs.microsoft.com/en-us/azure/architecture/patterns/sidecar), where you query for metrics from an external persistent store your app maintains. This utility just makes it easier for anyone to write custom SQL queries and expose metrics without having to worry about Prometheus format/exposition logic. You can run a single binary anywhere in your cluster environment which has access to the external store which exposes the metrics on an HTTP server confirming to Prometheus metric format.
 
 
 ### Installation

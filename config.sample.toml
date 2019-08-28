@@ -1,10 +1,10 @@
 [app]
 log_level = "debug" # Logging Level. `production` will log only `INFO` and higher. Use `debug` to enable verbose logging.
-query="example/queries.sql"
 [[app.jobs]]
 name="myjob" # Unique Job Name
 namespace="myns"
 db="postgres"
+query="example/queries.sql"
 dsn="postgres://postgres:postgres@localhost:9432/postgres?sslmode=disable"
 [[app.jobs.metrics]] # List of metric names to add with additional config.
 query = "get-max"

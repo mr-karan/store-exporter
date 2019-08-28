@@ -1,0 +1,21 @@
+# NOTE: This docker-compose.yml is meant to be just an example guideline
+# on how you can achieve the same. It is not intented to run out of the box
+# and you must edit the below configurations to suit your needs.
+
+version: "3.7"
+
+services:
+  app:
+    restart: unless-stopped
+    image: mrkaran/store-exporter:v0.1.0
+    ports:
+      - "9610:9610"
+    networks:
+      - store-exporter
+    volumes:
+      - type: bind
+        source: /etc/store-exporter/
+        target: /etc/store-exporter/
+
+networks:
+  store-exporter:
