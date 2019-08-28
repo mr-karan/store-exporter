@@ -1,6 +1,2 @@
 - Redis store
-- docker-compose
-- Logo
-- Documentation + README
-- Goreleaser / (github actions)
-- Grafana screenshots
+- Metric type (currently only gaugevec)

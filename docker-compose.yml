@@ -7,7 +7,7 @@ version: "3.7"
 services:
   app:
     restart: unless-stopped
-    image: mrkaran/store-exporter:v0.1.0
+    image: mrkaran/store-exporter:latest
     ports:
       - "9610:9610"
     networks:

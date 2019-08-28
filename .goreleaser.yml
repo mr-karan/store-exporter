@@ -1,5 +1,6 @@
 env:
   - GO111MODULE=on
+  - CGO_ENABLED=0
   - RELEASE_BUILDS=dist/store-exporter_darwin_amd64/store-exporter dist/store-exporter_linux_amd64/store-exporter dist/store-exporter_windows_amd64//store-exporter.exe
 
 builds:
