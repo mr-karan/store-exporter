@@ -52,7 +52,7 @@ func main() {
 		// you instantiate with, since we pass `job` as a pointer to the struct.
 		j := job
 		// Initialize the exporter. Exporter is a collection of metrics to be exported.
-		exporter, err := hub.NewExporter(hub.config.App.Namespace, &j, hub.config.App.QueryFile)
+		exporter, err := hub.NewExporter(hub.config.App.Namespace, &j)
 		if err != nil {
 			hub.logger.Panicf("exporter initialization failed for %s : %s", job.Name, err)
 		}
