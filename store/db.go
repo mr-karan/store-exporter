@@ -1,8 +1,6 @@
 package store
 
 import (
-	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
@@ -39,17 +37,13 @@ func NewDBClient(db string, dsn string, queryFile string) (Manager, error) {
 
 // FetchResults executes the query and parses the result
 func (client *DBClient) FetchResults(query string) (map[string]interface{}, error) {
-	tx, err := client.Conn.BeginTxx(context.Background(), &sql.TxOptions{ReadOnly: true})
-	if err != nil {
-		return nil, err
-	}
 	q, ok := client.Queries[query]
 	if !ok {
 		return nil, fmt.Errorf("No query mapped to: %s", query)
 	}
-	row := tx.QueryRowx(q.Query)
+	row := client.Conn.QueryRowx(q.Query)
 	results := make(map[string]interface{})
-	err = row.MapScan(results) // connection is closed automatically here. Read more: https://jmoiron.github.io/sqlx/#queryrow
+	err := row.MapScan(results) // connection is closed automatically here. Read more: https://jmoiron.github.io/sqlx/#queryrow
 	if err != nil {
 		return nil, err
 	}
