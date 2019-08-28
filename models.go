@@ -18,9 +18,8 @@ type Hub struct {
 
 // cfgApp represents the structure to hold App specific configuration.
 type cfgApp struct {
-	LogLevel  string `koanf:"log_level"`
-	Namespace string `koanf:"namespace"`
-	Jobs      []Job  `koanf:"jobs"`
+	LogLevel string `koanf:"log_level"`
+	Jobs     []Job  `koanf:"jobs"`
 }
 
 // cfgServer represents the structure to hold Server specific configuration
@@ -41,7 +40,6 @@ type config struct {
 // Job represents a list of scrape jobs with additional config for the target.
 type Job struct {
 	Name      string   `koanf:"name"`
-	Namespace string   `koanf:"namespace"`
 	DB        string   `koanf:"db"`
 	DSN       string   `koanf:"dsn"`
 	QueryFile string   `koanf:"query"`

@@ -9,7 +9,7 @@ import (
 )
 
 // NewExporter returns an initialized `Exporter`.
-func (hub *Hub) NewExporter(namespace string, job *Job) (*Exporter, error) {
+func (hub *Hub) NewExporter(job *Job) (*Exporter, error) {
 	manager, err := store.NewManager(job.DB, job.DSN, &store.DBConnOpts{
 		QueryFilePath: job.QueryFile,
 	})
@@ -23,13 +23,13 @@ func (hub *Hub) NewExporter(namespace string, job *Job) (*Exporter, error) {
 		job:     job,
 		hub:     hub,
 		up: prometheus.NewDesc(
-			prometheus.BuildFQName(namespace, job.Name, "up"),
+			prometheus.BuildFQName(job.Name, "", "up"),
 			"Could the data source be reached.",
 			nil,
 			nil,
 		),
 		version: prometheus.NewDesc(
-			prometheus.BuildFQName(namespace, "", "version"),
+			prometheus.BuildFQName(job.Name, "", "version"),
 			"Version of store-exporter",
 			[]string{"build"},
 			nil,
@@ -94,13 +94,14 @@ func (p *Exporter) collectMetrics(ctx context.Context, ch chan<- prometheus.Metr
 		return
 	}
 	// Create metrics on the fly
-	metricDesc := createMetricDesc(p.job.Namespace, metric.Name, p.job.Name, metric.Help, metric.Labels)
+	metricDesc := createMetricDesc(p.job.Name, metric.Name, p.job.Name, metric.Help, metric.Labels)
 	p.hub.sendSafeMetric(ctx, ch, prometheus.MustNewConstMetric(metricDesc, prometheus.GaugeValue, value, labelValues...))
+	p.hub.sendSafeMetric(ctx, ch, prometheus.MustNewConstMetric(p.up, prometheus.GaugeValue, 1))
 
 }
 
 // createMetricDesc returns an intialized prometheus.Desc instance
-func createMetricDesc(namespace string, metricName string, jobName string, helpText string, additionalLabels []string) *prometheus.Desc {
+func createMetricDesc(name string, metricName string, jobName string, helpText string, additionalLabels []string) *prometheus.Desc {
 	// Default labels for any metric constructed with this function.
 	var labels []string
 	// Iterate through a slice of additional labels to be exported.
@@ -109,8 +110,8 @@ func createMetricDesc(namespace string, metricName string, jobName string, helpT
 		labels = append(labels, replaceWithUnderscores(k))
 	}
 	return prometheus.NewDesc(
-		prometheus.BuildFQName(replaceWithUnderscores(namespace), "", replaceWithUnderscores(metricName)),
+		prometheus.BuildFQName(replaceWithUnderscores(name), "", replaceWithUnderscores(metricName)),
 		helpText,
-		labels, prometheus.Labels{"job": replaceWithUnderscores(jobName)},
+		labels, prometheus.Labels{},
 	)
 }

@@ -25,7 +25,7 @@ Export your custom app metrics from external data _stores_ like PostgreSQL, MySQ
 
 ### Motivation
 
-`store-exporter` loads SQL query file and fetches the data from DB and transforms the result in Prometheus text format. A lot of times, it is indesirable to add instrumentation right in your app for the following reasons:
+`store-exporter` loads SQL query file and fetches the data from DB and transforms the result in Prometheus text format. A lot of times, it is undesirable to add instrumentation right in your app for the following reasons:
 
 - Your app doesn't have any HTTP server, but to just extract metrics you've to invoke HTTP server.
 - Your app cares about being _fast_ in which case adding any external library penalises performance.
@@ -73,12 +73,12 @@ cp config.toml.sample config.toml # change the settings like server address, job
 You can send a `GET` request to `/metrics` and see the following metrics in Prometheus format:
 
 ```bash
-# HELP myns_basicname this is such a great help text
-# TYPE myns_basicname gauge
-myns_basicname{job="myjob",pg_db_blks_hit="74400",pg_db_tup_inserted="120"} 13713
-# HELP myns_verybasic_name this is such a great help text again
-# TYPE myns_verybasic_name gauge
-myns_verybasic_name{job="myjob",pg_db_conflicts="0",pg_db_temp_bytes="0"} 40
+# HELP job_name_basicname this is such a great help text
+# TYPE job_name_basicname gauge
+job_name_basicname{job="myjob",pg_db_blks_hit="74400",pg_db_tup_inserted="120"} 13713
+# HELP job_name_verybasic_name this is such a great help text again
+# TYPE job_name_verybasic_name gauge
+job_name_verybasic_name{job="myjob",pg_db_conflicts="0",pg_db_temp_bytes="0"} 40
 # HELP version Version of store-exporter
 # TYPE version gauge
 version{build="846771f (2019-08-28 10:28:07 +0530)"} 1
@@ -98,7 +98,6 @@ version{build="846771f (2019-08-28 10:28:07 +0530)"} 1
   - **log_level**: "production" for all `INFO` level logs. If you want to enable verbose logging use "debug".
   - **jobs**
     - **name**: Unique identifier for the job.
-    - **namespace**: Unique Namespace added in metric label for each job.
     - **query**: Path to SQL file.
     - **db**: Type of SQL DB. Supported values: [postgres, mysql].
     - **dsn**: Connection URL to the DB.
