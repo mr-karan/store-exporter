@@ -49,7 +49,7 @@ func (client *DBClient) FetchResults(query string) (map[string]interface{}, erro
 	}
 	row := tx.QueryRowx(q.Query)
 	results := make(map[string]interface{})
-	err = row.MapScan(results)
+	err = row.MapScan(results) // connection is closed automatically here. Read more: https://jmoiron.github.io/sqlx/#queryrow
 	if err != nil {
 		return nil, err
 	}
