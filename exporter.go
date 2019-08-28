@@ -9,9 +9,9 @@ import (
 )
 
 // NewExporter returns an initialized `Exporter`.
-func (hub *Hub) NewExporter(namespace string, job *Job, queryFile string) (*Exporter, error) {
+func (hub *Hub) NewExporter(namespace string, job *Job) (*Exporter, error) {
 	manager, err := store.NewManager(job.DB, job.DSN, &store.DBConnOpts{
-		QueryFilePath: queryFile,
+		QueryFilePath: job.QueryFile,
 	})
 	if err != nil {
 		hub.logger.Errorf("Error initializing database manager: %s", err)
