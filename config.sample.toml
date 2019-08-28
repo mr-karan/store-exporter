@@ -4,7 +4,7 @@ log_level = "debug" # Logging Level. `production` will log only `INFO` and highe
 name="myjob" # Unique Job Name
 namespace="myns"
 db="postgres"
-query="example/queries.sql"
+query="examples/queries.sql"
 dsn="postgres://postgres:postgres@localhost:9432/postgres?sslmode=disable"
 [[app.jobs.metrics]] # List of metric names to add with additional config.
 query = "get-max"
@@ -22,7 +22,7 @@ value="pg_db_xact_rollback"
 
 [server]
 address = ":9610"
-name = "store-exporter-exporter"
+name = "store-exporter"
 read_timeout=8000
 write_timeout=8000
 max_body_size=40000

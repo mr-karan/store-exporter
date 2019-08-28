@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-
-	_ "github.com/lib/pq"
 )
 
 // constructMetricData takes a map of column names with corresponding values and returns in

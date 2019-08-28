@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	github.com/aws/aws-sdk-go v1.23.7
+	github.com/go-sql-driver/mysql v1.4.0
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/knadh/goyesql v2.0.0+incompatible
 	github.com/knadh/koanf v0.4.4

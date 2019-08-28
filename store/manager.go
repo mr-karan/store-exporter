@@ -2,6 +2,9 @@ package store
 
 import (
 	"fmt"
+
+	_ "github.com/go-sql-driver/mysql" // Imports mysql driver
+	_ "github.com/lib/pq"              // Imports postgresql driver
 )
 
 // Manager represents the set of methods used to interact with the db.
