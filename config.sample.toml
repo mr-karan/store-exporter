@@ -1,0 +1,28 @@
+[app]
+log_level = "debug" # Logging Level. `production` will log only `INFO` and higher. Use `debug` to enable verbose logging.
+query="example/queries.sql"
+[[app.jobs]]
+name="myjob" # Unique Job Name
+namespace="myns"
+db="postgres"
+dsn="postgres://postgres:postgres@localhost:9432/postgres?sslmode=disable"
+[[app.jobs.metrics]] # List of metric names to add with additional config.
+query = "get-max"
+help="this is such a great help text"
+name="basicname"
+labels=["pg_db_blks_hit","pg_db_tup_inserted"]
+value="pg_db_tup_fetched"
+
+[[app.jobs.metrics]] # List of metric names to add with additional config.
+query = "get-max"
+help="this is such a great help text again"
+name="verybasic_name"
+labels=["pg_db_conflicts","pg_db_temp_bytes"]
+value="pg_db_xact_rollback"
+
+[server]
+address = ":9610"
+name = "store-exporter-exporter"
+read_timeout=8000
+write_timeout=8000
+max_body_size=40000

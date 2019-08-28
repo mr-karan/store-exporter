@@ -1,0 +1,6 @@
+- Redis store
+- docker-compose
+- Logo
+- Documentation + README
+- Goreleaser / (github actions)
+- Grafana screenshots
