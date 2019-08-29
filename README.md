@@ -102,11 +102,10 @@ version{build="846771f (2019-08-28 10:28:07 +0530)"} 1
     - **db**: Type of SQL DB. Supported values: [postgres, mysql].
     - **dsn**: Connection URL to the DB.
     - **metrics**:
-      - **name**: Name of the metric.
       - **help**: Helptext for the metric
       - **query**: Name of the query mapped in `sql` file, used to query the db for this metric.
-      - **labels**: List of column names fetched from the DB, to be used in metric as key/value pairs.
-      - **value**: Column name, for which the value should be used for the metric.
+      - **labels**: List of additional column names fetched from the DB, to be used in metric as key/value pairs.
+      - **columns**: Each column name creates a separate Prometheus `metric` and the corresponding value fetched from the store is used as the metric value.
 
 **NOTE**: You can use `--config` flag to supply a custom config file path while running `store-exporter`.
 

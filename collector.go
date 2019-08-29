@@ -1,18 +1,16 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 // constructMetricData takes a map of column names with corresponding values and returns in
 // format of Prometheus metric value and lables
-func constructMetricData(data map[string]interface{}, valueName string, labels []string) (float64, []string, error) {
+func constructMetricData(data map[string]interface{}, column string, labels []string) (float64, []string, error) {
 	var (
 		value float64
 		err   error
 	)
 	// if column name is in the result set, get the value
-	if i, ok := data[valueName]; ok {
+	if i, ok := data[column]; ok {
 		value = getFloatValue(i)
 	}
 	labelValues := []string{}

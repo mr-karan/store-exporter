@@ -1,23 +1,30 @@
 [app]
-log_level = "debug" # Logging Level. `production` will log only `INFO` and higher. Use `debug` to enable verbose logging.
+# Logging Level. Supported values are `production` and `debug`.
+log_level = "debug"
+# List of jobs to be registered to collect metrics for.
 [[app.jobs]]
-name="myjob" # Unique Job Name
+ # Unique Identifier for a Job.
+name="dbstats"
+# Supported external stores are `postgres` and `mysql`.
 db="postgres"
+# Path to SQL file to be used for all metric queries for this job.
 query="examples/queries.sql"
+# DSN connection string to authenticate and create a connection to external store.
 dsn="postgres://postgres:postgres@localhost:9432/postgres?sslmode=disable"
-[[app.jobs.metrics]] # List of metric names to add with additional config.
+ # List of metric names to be collected in one job.
+[[app.jobs.metrics]]
+# Query name defined in `query` file.
 query = "get-max"
+# Help text for the metric
 help="this is such a great help text"
-name="basicname"
-labels=["pg_db_blks_hit","pg_db_tup_inserted"]
-value="pg_db_tup_fetched"
-
-[[app.jobs.metrics]] # List of metric names to add with additional config.
-query = "get-max"
-help="this is such a great help text again"
-name="verybasic_name"
-labels=["pg_db_conflicts","pg_db_temp_bytes"]
-value="pg_db_xact_rollback"
+ # List of additional labels to add to the metric. Extra care must be taken to ensure the labels are unique
+ # to ensure label consistency. If uniqueness is not maintained, Prometheus will treat two metrics as different
+ # and any kind of aggregation won't be possible in that case. The value of the label key is fetched from the SQL
+ # result.
+labels=["abc"]
+# Each column name constructs a metric with the name as the column name and the corresponding column value
+# becomes the metric value.
+columns=["pg_db_blks_hit","pg_db_tup_inserted"] # Additional metrics constructed for each column
 
 [server]
 address = ":9610"

@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"sync"
 
 	"github.com/mr-karan/store-exporter/store"
@@ -74,35 +73,30 @@ func (p *Exporter) Collect(ch chan<- prometheus.Metric) {
 	defer p.Unlock()
 	p.hub.logger.Debugf("Collecting metric data for job: %v", p.job.Name)
 	for _, m := range p.job.Metrics {
-		value, labelValues, err := p.collectMetrics(m)
-		if err != nil {
-			p.hub.logger.Errorf("Error while collecting metrics for job: %v metric: %v : %v", p.job.Name, m.Name, err)
-			return
-		}
-		p.dispatchMetrics(ctx, ch, value, labelValues, m)
+		p.collectMetrics(ctx, ch, m)
 	}
 	// Send default metrics data.
 	p.hub.sendSafeMetric(ctx, ch, prometheus.MustNewConstMetric(p.version, prometheus.GaugeValue, 1, p.hub.version))
 }
 
 // collectMetrics fetches data from external stores and sends as Prometheus metrics
-func (p *Exporter) collectMetrics(metric Metric) (float64, []string, error) {
+func (p *Exporter) collectMetrics(ctx context.Context, ch chan<- prometheus.Metric, metric Metric) {
 	data, err := p.manager.FetchResults(metric.Query)
 	if err != nil {
-		return -1, nil, fmt.Errorf("Error while fetching result from DB: %v", err)
+		p.hub.logger.Errorf("Error while fetching result from DB: %v", err)
+		return
 	}
-	value, labelValues, err := constructMetricData(data, metric.Value, metric.Labels)
-	if err != nil {
-		return -1, nil, fmt.Errorf("Error while converting results to metrics: %v", err)
+	for _, col := range metric.Columns {
+		value, labelValues, err := constructMetricData(data, col, metric.Labels)
+		if err != nil {
+			p.hub.logger.Errorf("Error while converting results to metrics: %v", err)
+			return
+		}
+		// Create metrics on the fly
+		metricDesc := createMetricDesc(p.job.Name, col, p.job.Name, metric.Help, metric.Labels)
+		p.hub.sendSafeMetric(ctx, ch, prometheus.MustNewConstMetric(metricDesc, prometheus.GaugeValue, value, labelValues...))
 	}
-	return value, labelValues, nil
-}
-
-// dispatchMetrics dispatches metric data collected to a channel
-func (p *Exporter) dispatchMetrics(ctx context.Context, ch chan<- prometheus.Metric, value float64, labelValues []string, metric Metric) {
-	// Create metrics on the fly
-	metricDesc := createMetricDesc(p.job.Name, metric.Name, p.job.Name, metric.Help, metric.Labels)
-	p.hub.sendSafeMetric(ctx, ch, prometheus.MustNewConstMetric(metricDesc, prometheus.GaugeValue, value, labelValues...))
+	return
 }
 
 // createMetricDesc returns an intialized prometheus.Desc instance

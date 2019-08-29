@@ -58,9 +58,8 @@ type Exporter struct {
 
 // Metric represents the structure to hold details about constructing a Prometheus.Metric
 type Metric struct {
-	Query  string   `koanf:"query"`
-	Name   string   `konaf:"name"`
-	Labels []string `koanf:"labels"`
-	Value  string   `koanf:"value"`
-	Help   string   `koanf:"help"`
+	Query   string   `koanf:"query"`
+	Columns []string `koanf:"columns"`
+	Help    string   `koanf:"help"`
+	Labels  []string `koanf:"labels"`
 }
