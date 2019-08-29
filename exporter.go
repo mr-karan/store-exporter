@@ -93,14 +93,14 @@ func (p *Exporter) collectMetrics(ctx context.Context, ch chan<- prometheus.Metr
 			return
 		}
 		// Create metrics on the fly
-		metricDesc := createMetricDesc(p.job.Name, col, p.job.Name, metric.Help, metric.Labels)
+		metricDesc := createMetricDesc(metric.Namespace, col, p.job.Name, metric.Help, metric.Labels)
 		p.hub.sendSafeMetric(ctx, ch, prometheus.MustNewConstMetric(metricDesc, prometheus.GaugeValue, value, labelValues...))
 	}
 	return
 }
 
 // createMetricDesc returns an intialized prometheus.Desc instance
-func createMetricDesc(name string, metricName string, jobName string, helpText string, additionalLabels []string) *prometheus.Desc {
+func createMetricDesc(namespace string, metricName string, jobName string, helpText string, additionalLabels []string) *prometheus.Desc {
 	// Default labels for any metric constructed with this function.
 	var labels []string
 	// Iterate through a slice of additional labels to be exported.
@@ -109,8 +109,8 @@ func createMetricDesc(name string, metricName string, jobName string, helpText s
 		labels = append(labels, replaceWithUnderscores(k))
 	}
 	return prometheus.NewDesc(
-		prometheus.BuildFQName(replaceWithUnderscores(name), "", replaceWithUnderscores(metricName)),
+		prometheus.BuildFQName(replaceWithUnderscores(namespace), "", replaceWithUnderscores(metricName)),
 		helpText,
-		labels, prometheus.Labels{},
+		labels, prometheus.Labels{"job": jobName},
 	)
 }

@@ -102,6 +102,7 @@ version{build="846771f (2019-08-28 10:28:07 +0530)"} 1
     - **db**: Type of SQL DB. Supported values: [postgres, mysql].
     - **dsn**: Connection URL to the DB.
     - **metrics**:
+      - **namespace**: Unique identifier for the metric, prepended in each metric name.
       - **help**: Helptext for the metric
       - **query**: Name of the query mapped in `sql` file, used to query the db for this metric.
       - **labels**: List of additional column names fetched from the DB, to be used in metric as key/value pairs.

@@ -13,6 +13,8 @@ query="examples/queries.sql"
 dsn="postgres://postgres:postgres@localhost:9432/postgres?sslmode=disable"
  # List of metric names to be collected in one job.
 [[app.jobs.metrics]]
+# Namespace is a unique name prepended to each metric name.
+namespace="pg_max"
 # Query name defined in `query` file.
 query = "get-max"
 # Help text for the metric
