@@ -81,11 +81,13 @@ func (p *Exporter) Collect(ch chan<- prometheus.Metric) {
 
 // collectMetrics fetches data from external stores and sends as Prometheus metrics
 func (p *Exporter) collectMetrics(ctx context.Context, ch chan<- prometheus.Metric, metric Metric) {
+	p.hub.logger.Debugf("Querying the store for metrics with query: %v", metric.Query)
 	data, err := p.manager.FetchResults(metric.Query)
 	if err != nil {
 		p.hub.logger.Errorf("Error while fetching result from DB: %v", err)
 		return
 	}
+	p.hub.logger.Debugf("Fetched data from db for job: %v metric: %v", p.job.Name, metric.Namespace)
 	for _, col := range metric.Columns {
 		value, labelValues, err := constructMetricData(data, col, metric.Labels)
 		if err != nil {
