@@ -64,8 +64,8 @@ cp config.sample.toml config.toml
 
 ```sh
 mkdir store-exporter && cd store-exporter/ # copy the binary and config.sample in this folder
-cp config.toml.sample config.toml # change the settings like server address, job metadata, aws credentials etc.
-./store-exporter # this command starts a web server and is ready to collect metrics from EC2.
+cp config.toml.sample config.toml # change the settings like server address, job metadata, db credentials etc.
+./store-exporter # this command starts a web server and is ready to collect metrics.
 ```
 
 ### Testing a sample scrape request
