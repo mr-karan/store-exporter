@@ -10,9 +10,7 @@ import (
 
 // NewExporter returns an initialized `Exporter`.
 func (hub *Hub) NewExporter(job *Job) (*Exporter, error) {
-	manager, err := store.NewManager(job.DB, job.DSN, &store.DBConnOpts{
-		QueryFilePath: job.QueryFile,
-	})
+	manager, err := store.NewManager(job.Store)
 	if err != nil {
 		hub.logger.Errorf("Error initializing database manager: %s", err)
 		return nil, err
@@ -113,6 +111,6 @@ func createMetricDesc(namespace string, metricName string, jobName string, helpT
 	return prometheus.NewDesc(
 		prometheus.BuildFQName(replaceWithUnderscores(namespace), "", replaceWithUnderscores(metricName)),
 		helpText,
-		labels, prometheus.Labels{"job": jobName},
+		labels, prometheus.Labels{"job": replaceWithUnderscores(jobName)},
 	)
 }

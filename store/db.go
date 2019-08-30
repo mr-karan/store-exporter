@@ -14,20 +14,27 @@ type DBClient struct {
 	Queries goyesql.Queries
 }
 
+// DBClientOpts represents additional options to use for DB Client
+type DBClientOpts struct {
+	QueryFile    string
+	MaxIdleConns int
+	MaxOpenConns int
+}
+
 // NewDBClient initializes a connection object with the databse.
-func NewDBClient(db string, dsn string, queryFile string) (Manager, error) {
+func NewDBClient(db string, dsn string, opts *DBClientOpts) (Manager, error) {
 	conn, err := sqlx.Connect(db, dsn)
 	if err != nil {
 		return nil, err
 	}
 	// Connection Pool grows unbounded, have some sane defaults.
-	conn.SetMaxIdleConns(3)
-	conn.SetMaxOpenConns(5)
+	conn.SetMaxIdleConns(opts.MaxIdleConns)
+	conn.SetMaxOpenConns(opts.MaxOpenConns)
 	// Load queries
-	if queryFile == "" {
+	if opts.QueryFile == "" {
 		return nil, fmt.Errorf("error initialising DB Manager: Path to query file not provided")
 	}
-	queries := goyesql.MustParseFile(queryFile)
+	queries := goyesql.MustParseFile(opts.QueryFile)
 
 	return &DBClient{
 		Conn:    conn,

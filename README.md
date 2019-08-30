@@ -98,9 +98,12 @@ version{build="846771f (2019-08-28 10:28:07 +0530)"} 1
   - **log_level**: "production" for all `INFO` level logs. If you want to enable verbose logging use "debug".
   - **jobs**
     - **name**: Unique identifier for the job.
-    - **query**: Path to SQL file.
-    - **db**: Type of SQL DB. Supported values: [postgres, mysql].
-    - **dsn**: Connection URL to the DB.
+    -- **store**: Config options for the store
+      - **db**: Type of SQL DB. Supported values: [postgres, mysql].
+      - **dsn**: Connection URL to the DB.
+      - **query**: Path to SQL file.
+      - **max_open_connections**: Max open connections to the DB.
+      - **max_idle_connections**: Max idle connections maintained in the connection pool.
     - **metrics**:
       - **namespace**: Unique identifier for the metric, prepended in each metric name.
       - **help**: Helptext for the metric

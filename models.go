@@ -39,11 +39,9 @@ type config struct {
 
 // Job represents a list of scrape jobs with additional config for the target.
 type Job struct {
-	Name      string   `koanf:"name"`
-	DB        string   `koanf:"db"`
-	DSN       string   `koanf:"dsn"`
-	QueryFile string   `koanf:"query"`
-	Metrics   []Metric `koanf:"metrics"`
+	Name    string      `koanf:"name"`
+	Store   store.Store `koanf:"store"`
+	Metrics []Metric    `koanf:"metrics"`
 }
 
 // Exporter represents the structure to hold Prometheus Descriptors. It implements prometheus.Collector

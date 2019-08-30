@@ -7,23 +7,37 @@ import (
 	_ "github.com/lib/pq"              // Imports postgresql driver
 )
 
+// Store represents additional options for the external store
+type Store struct {
+	MaxOpenConnections int    `koanf:"max_open_connections"`
+	MaxIdleConnections int    `koanf:"max_idle_connections"`
+	DB                 string `koanf:"db"`
+	DSN                string `koanf:"dsn"`
+	QueryFile          string `koanf:"query"`
+}
+
 // Manager represents the set of methods used to interact with the db.
 type Manager interface {
 	FetchResults(string) (map[string]interface{}, error)
 }
 
 // DBConnOpts represents additonal parameters to create a DB Client
-type DBConnOpts struct {
-	QueryFilePath string
-}
 
 // NewManager instantiates an object of Manager based on the params
-func NewManager(db string, dsn string, opts *DBConnOpts) (Manager, error) {
-	switch dbType := db; dbType {
+func NewManager(store Store) (Manager, error) {
+	switch dbType := store.DB; dbType {
 	case "postgres":
-		return NewDBClient(db, dsn, opts.QueryFilePath)
+		return NewDBClient(store.DB, store.DSN, &DBClientOpts{
+			QueryFile:    store.QueryFile,
+			MaxIdleConns: store.MaxIdleConnections,
+			MaxOpenConns: store.MaxOpenConnections,
+		})
 	case "mysql":
-		return NewDBClient(db, dsn, opts.QueryFilePath)
+		return NewDBClient(store.DB, store.DSN, &DBClientOpts{
+			QueryFile:    store.QueryFile,
+			MaxIdleConns: store.MaxIdleConnections,
+			MaxOpenConns: store.MaxOpenConnections,
+		})
 	// TODO case "redis":
 	default:
 		return nil, fmt.Errorf("Error fetching results: Unknown db type")
