@@ -6,15 +6,17 @@ log_level = "debug"
  # Unique Identifier for a Job.
 name="dbstats"
 # Supported external stores are `postgres` and `mysql`.
+[app.jobs.store]
 db="postgres"
 # Path to SQL file to be used for all metric queries for this job.
 query="examples/queries.sql"
 # DSN connection string to authenticate and create a connection to external store.
 dsn="postgres://postgres:postgres@localhost:9432/postgres?sslmode=disable"
+max_open_connections=3
+max_idle_connections=5
  # List of metric names to be collected in one job.
 [[app.jobs.metrics]]
-# Namespace is a unique name prepended to each metric name.
-namespace="pg_max"
+namespace="wowmy"
 # Query name defined in `query` file.
 query = "get-max"
 # Help text for the metric
@@ -33,4 +35,4 @@ address = ":9610"
 name = "store-exporter"
 read_timeout=8000
 write_timeout=8000
-max_body_size=40000
+max_body_size=40000%    
