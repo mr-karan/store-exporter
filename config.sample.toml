@@ -5,12 +5,12 @@ log_level = "debug"
 [[app.jobs]]
  # Unique Identifier for a Job.
 name="dbstats"
-# Supported external stores are `postgres` and `mysql`.
+# Supported external stores are `postgres`, `mysql` and `sqlite3`.
 [app.jobs.store]
 db="postgres"
 # Path to SQL file to be used for all metric queries for this job.
 query="examples/queries.sql"
-# DSN connection string to authenticate and create a connection to external store.
+# DSN connection string to authenticate and create a connection to external store. (For sqlite3, it's just the path to db file)
 dsn="postgres://postgres:postgres@localhost:9432/postgres?sslmode=disable"
 max_open_connections=3
 max_idle_connections=5
