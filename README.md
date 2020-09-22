@@ -1,3 +1,5 @@
+<a href="https://zerodha.tech"><img src="https://zerodha.tech/static/images/github-badge.svg" align="right" /></a>
+
 # store-exporter
 _Utility to extract metrics from arbitary data stores in Prometheus format_
 
